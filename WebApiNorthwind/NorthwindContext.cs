@@ -89,7 +89,6 @@ namespace WebApiNorthwind
 
                 entity.Property(e => e.Description).HasColumnType("ntext");
 
-                entity.Property(e => e.Picture).HasColumnType("image");
             });
 
             modelBuilder.Entity<CategorySalesFor1997>(entity =>

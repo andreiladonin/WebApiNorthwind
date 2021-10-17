@@ -34,6 +34,7 @@ namespace WebApiNorthwind.Controllers
             foreach (var category in categories)
             {
                 var obj = new JObject();
+                obj["id"] = category.CategoryId;
                 obj["name"] = category.CategoryName;
                 obj["desc"] = category.Description;
 
@@ -41,6 +42,19 @@ namespace WebApiNorthwind.Controllers
             }
 
             return jArray.ToString();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Category>> Post(Category category)
+        {
+            if (category == null)
+            {
+                return BadRequest();
+            }
+
+            _db.Categories.Add(category);
+            await _db.SaveChangesAsync();
+            return Ok(category);
         }
     }
 }
