@@ -21,3 +21,13 @@ table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
 }
+
+input {
+    width: 200px;
+    height: 30px;
+    margin-bottom: 10px;
+}
+
+button {
+    margin-bottom: 10px;
+}
