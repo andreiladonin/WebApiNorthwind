@@ -1,6 +1,6 @@
 const URL = "api/Categories";
 
-async function getCategories (url) {
+async function getApi (url) {
     let req = await fetch (url);
     if( req.ok ) {
         let data =  await req.json();
@@ -9,11 +9,11 @@ async function getCategories (url) {
 }
 
 
-getCategories(URL)
+getApi(URL)
 .then((data) => {
     let tbody = document.querySelector('tbody')
-    console.log(data)
-
+    /* console.log(data)
+ */
     data.forEach(element => {
         /* console.log (element["name"]  + " " + element['desc']);  */
         let tdId = document.createElement("td");
@@ -29,6 +29,33 @@ getCategories(URL)
         tr.append(tdId)
         tr.append(tdName);
         tr.append(tdDesc);
+
+        tbody.append(tr);
+    });
+});
+
+getApi("api/product")
+.then((data) => {
+    let tbody = document.querySelector('#products')
+
+    data.forEach(element => {
+        let tdId = document.createElement("td");
+        tdId.innerText = element["id"];
+
+        let tdName = document.createElement("td");
+        tdName.innerText = element["name"];
+
+        let tdCategory = document.createElement("td");
+        tdCategory.innerText = element["category_name"];
+
+        let tdCompany = document.createElement("td");
+        tdCompany.innerText = element["supplier_name"];
+
+        let tr = document.createElement("tr");
+        tr.append(tdId)
+        tr.append(tdName);
+        tr.append(tdCategory);
+        tr.append(tdCompany);
 
         tbody.append(tr);
     });
