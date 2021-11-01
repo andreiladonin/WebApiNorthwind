@@ -59,7 +59,7 @@ getApi("api/product")
         tdCompany.innerText = element["supplier_name"];
 
         let tdDellete = document.createElement('td')
-        tdDellete.innerHTML =   `<button value='${element["id"]}'>Dellete</button>`
+        tdDellete.innerHTML =   `<button class="product_dellete" value='${element["id"]}'>Dellete</button>`
         
         let tr = document.createElement("tr");
         tr.append(tdId)
@@ -133,3 +133,28 @@ getApi("api/company")
         companies.innerHTML += `<option value="${element['id']}">${element['company']}</option>`
     });
 });
+
+
+async function dellete_product(id){
+
+    let req = await fetch("api/product/"+id,
+        {
+            method: "DELETE"})
+    
+    if (req.ok) {
+        return await req.text();
+    }
+}
+
+
+document.querySelector('#products').addEventListener('click', (e)=> {
+
+    if(e.target.tagName != "BUTTON") {
+        return
+    }
+
+    let response = dellete_product(e.target.value);
+    if  (response != null) {
+        window.location.reload();
+    }
+})
