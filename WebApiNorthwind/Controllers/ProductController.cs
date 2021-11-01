@@ -40,5 +40,41 @@ namespace WebApiNorthwind.Controllers
             
             return jArray.ToString() ;
         }
+
+
+        [HttpPost]
+        public ActionResult<Product> Post(Product product)
+        {
+
+            if (product == null)
+            {
+                return BadRequest();
+            }
+
+            _db.Products.Add(product);
+            _db.SaveChanges();
+            return Ok(product);
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult<string> DeleteProduct(int? id)
+        {
+            if (id == null || id <= 0 )
+            {
+                return BadRequest();
+            }
+
+            var obj = _db.Products.Find(id);
+
+            if (obj == null)
+            {
+                return BadRequest();
+            }
+
+            _db.Products.Remove(obj);
+            _db.SaveChanges();
+            return Ok("Product delleted");
+        }
     }
+
 }

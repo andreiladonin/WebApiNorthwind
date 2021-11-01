@@ -14,6 +14,13 @@ getApi(URL)
     let tbody = document.querySelector('tbody')
     /* console.log(data)
  */
+    let categories = document.querySelector('#categotry-list')
+
+    data.forEach(element=> {
+        categories.innerHTML += `<option value="${element['id']}">${element['name']}</option>`
+    });
+
+
     data.forEach(element => {
         /* console.log (element["name"]  + " " + element['desc']);  */
         let tdId = document.createElement("td");
@@ -51,18 +58,23 @@ getApi("api/product")
         let tdCompany = document.createElement("td");
         tdCompany.innerText = element["supplier_name"];
 
+        let tdDellete = document.createElement('td')
+        tdDellete.innerHTML =   `<button value='${element["id"]}'>Dellete</button>`
+        
         let tr = document.createElement("tr");
         tr.append(tdId)
         tr.append(tdName);
         tr.append(tdCategory);
         tr.append(tdCompany);
 
+        tr.append(tdDellete);
+
         tbody.append(tr);
     });
 });
 
-async function append_category(categories) {
-    let response = await fetch(URL, {
+async function append_category(url,categories) {
+    let response = await fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -87,9 +99,37 @@ document.querySelector("#btn-submit").addEventListener("click", () => {
          alert("Введите значения");
      } else{
 
-        append_category(categories).then((result)=> {
-            alert("ok");
+        append_category(URL, categories).then((result)=> {
             window.location.reload();
         })
      }
 })
+
+document.querySelector("#btn-submit-product").addEventListener("click", () => {
+
+    let name_product = document.querySelector("#name_product").value;
+
+    let category_id = document.querySelector("#categotry-list").value;
+    let company_id = document.querySelector("#companies-list").value;
+   
+    let product = {
+        "ProductName": name_product,
+        "SupplierId": company_id,
+        "CategoryId": category_id
+        
+    }
+
+    append_category("api/product", product).then((result)=> {
+        window.location.reload();
+    })
+})
+
+
+getApi("api/company")
+.then((data) => {
+    let companies = document.querySelector('#companies-list')
+
+    data.forEach(element => {
+        companies.innerHTML += `<option value="${element['id']}">${element['company']}</option>`
+    });
+});
