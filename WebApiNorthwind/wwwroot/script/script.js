@@ -41,7 +41,7 @@ getApi(URL)
     });
 });
 
-getApi("api/product")
+getApi("api/products")
 .then((data) => {
     let tbody = document.querySelector('#products')
 
@@ -119,7 +119,7 @@ document.querySelector("#btn-submit-product").addEventListener("click", () => {
         
     }
 
-    append_category("api/product", product).then((result)=> {
+    append_category("api/products", product).then((result)=> {
         window.location.reload();
     })
 })
@@ -137,12 +137,15 @@ getApi("api/company")
 
 async function dellete_product(id){
 
-    let req = await fetch("api/product/"+id,
+    let req = await fetch("api/products/"+id,
         {
             method: "DELETE"})
-    
+
     if (req.ok) {
-        return await req.text();
+        return await 200;
+    }
+    else {
+        return await req.status;
     }
 }
 
@@ -154,7 +157,12 @@ document.querySelector('#products').addEventListener('click', (e)=> {
     }
 
     let response = dellete_product(e.target.value);
-    if  (response != null) {
-        window.location.reload();
-    }
+    response.then(result => {
+        if (result == 200) {
+            window.location.reload()
+        } else {
+            alert("Conflict Status 409");
+        }
+    })
+
 })

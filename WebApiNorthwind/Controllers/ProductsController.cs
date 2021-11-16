@@ -11,11 +11,11 @@ namespace WebApiNorthwind.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public class ProductsController : ControllerBase
     {
         private readonly NorthwindContext _db;
 
-        public ProductController(NorthwindContext db)
+        public ProductsController(NorthwindContext db)
         {
             _db = db;
         }
@@ -71,9 +71,25 @@ namespace WebApiNorthwind.Controllers
                 return BadRequest();
             }
 
-            _db.Products.Remove(obj);
-            _db.SaveChanges();
-            return Ok("Product delleted");
+            try
+            {
+                _db.Products.Remove(obj);
+                _db.SaveChanges();
+                return Ok();
+            }
+            catch (Exception)
+            {
+
+                return Conflict() ;
+            }
+
+
+        }
+        
+        [HttpPut("{id}")]
+        public IActionResult ChangeProduct(int id, Product product)
+        {
+            return null;
         }
     }
 
