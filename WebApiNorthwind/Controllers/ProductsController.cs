@@ -77,11 +77,26 @@ namespace WebApiNorthwind.Controllers
                 _db.SaveChanges();
                 return Ok();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                return Conflict() ;
+                var jObject = new JObject();
+                jObject["message"] = ex.Message.ToString();
+                
+                
+
+                var jsonProduct  = new JObject();
+
+                jsonProduct["id"] = obj.ProductId;
+                jsonProduct["product"] = obj.ProductName;
+                jsonProduct["CategoryId"] = obj.CategoryId;
+                jsonProduct["SupplierId"] = obj.SupplierId;
+
+                jObject["Conflict Object"] = jsonProduct;
+
+                return Conflict(jObject.ToString()) ;
             }
+
 
 
         }

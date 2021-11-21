@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 namespace WebApiNorthwind
 {
+    [Serializable]
     public partial class Product
     {
         public Product()

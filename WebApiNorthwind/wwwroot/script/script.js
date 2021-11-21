@@ -11,7 +11,7 @@ async function getApi (url) {
 
 getApi(URL)
 .then((data) => {
-    let tbody = document.querySelector('tbody')
+    let tbody = document.querySelector('#categories')
     /* console.log(data)
  */
     let categories = document.querySelector('#categotry-list')
@@ -48,6 +48,7 @@ getApi("api/products")
     data.forEach(element => {
         let tdId = document.createElement("td");
         tdId.innerText = element["id"];
+        tdId.id = element["id"]
 
         let tdName = document.createElement("td");
         tdName.innerText = element["name"];
@@ -59,9 +60,14 @@ getApi("api/products")
         tdCompany.innerText = element["supplier_name"];
 
         let tdDellete = document.createElement('td')
-        tdDellete.innerHTML =   `<button class="product_dellete" value='${element["id"]}'>Dellete</button>`
+        tdDellete.innerHTML =  `<button class="product_dellete" value='${element["id"]}'>Delete</button>`
+
         
+
         let tr = document.createElement("tr");
+        
+
+
         tr.append(tdId)
         tr.append(tdName);
         tr.append(tdCategory);
@@ -152,9 +158,11 @@ async function dellete_product(id){
 
 document.querySelector('#products').addEventListener('click', (e)=> {
 
+
     if(e.target.tagName != "BUTTON") {
         return
     }
+
 
     let response = dellete_product(e.target.value);
     response.then(result => {
