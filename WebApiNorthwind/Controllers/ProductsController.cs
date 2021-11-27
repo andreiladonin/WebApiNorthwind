@@ -57,7 +57,7 @@ namespace WebApiNorthwind.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult<string> DeleteProduct(int? id)
+        public IActionResult DeleteProduct(int? id)
         {
             if (id == null || id <= 0 )
             {
@@ -77,23 +77,28 @@ namespace WebApiNorthwind.Controllers
                 _db.SaveChanges();
                 return Ok();
             }
-            catch (Exception ex)
+            catch (DbUpdateException ex)
             {
-
                 var jObject = new JObject();
-                jObject["message"] = ex.Message.ToString();
+
                 
+                jObject["message"] = ex.InnerException.Message;
+                jObject["Source"] = ex.InnerException.Source;
+
+                jObject["EntityCount"] = ex.Entries.Count();
+                foreach (var item in ex.Entries)
+                {
+                    var product = new JObject();
+                    product["ProductId"] = ((Product)item.Entity).ProductId;
+                    product["ProductName"] = ((Product)item.Entity).ProductName;
+                    product["CategoryId"] = ((Product)item.Entity).CategoryId;
+                    product["SupplierId"] = ((Product)item.Entity).SupplierId;
+
+                    jObject["EntityObject"] = product;
+                }
+
+               
                 
-
-                var jsonProduct  = new JObject();
-
-                jsonProduct["id"] = obj.ProductId;
-                jsonProduct["product"] = obj.ProductName;
-                jsonProduct["CategoryId"] = obj.CategoryId;
-                jsonProduct["SupplierId"] = obj.SupplierId;
-
-                jObject["Conflict Object"] = jsonProduct;
-
                 return Conflict(jObject.ToString()) ;
             }
 

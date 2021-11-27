@@ -151,10 +151,25 @@ async function dellete_product(id){
         return await 200;
     }
     else {
-        return await req.status;
+        return await req.json();
     }
 }
 
+function flash_message(text) {
+
+    let div_errors = document.querySelector("#erorrs");
+
+    if (div_errors.hasChildNodes()) {
+        div_errors.removeChild(div_errors.firstChild)
+    }
+
+    div_errors.style.backgroundColor = "#ea7070"
+
+    let pre = document.createElement('pre')
+    pre.innerHTML = text
+
+    div_errors.append(pre)
+}
 
 document.querySelector('#products').addEventListener('click', (e)=> {
 
@@ -169,7 +184,7 @@ document.querySelector('#products').addEventListener('click', (e)=> {
         if (result == 200) {
             window.location.reload()
         } else {
-            alert("Conflict Status 409");
+            flash_message(JSON.stringify(result, null, "  "))
         }
     })
 
